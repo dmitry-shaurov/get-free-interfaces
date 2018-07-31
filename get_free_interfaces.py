@@ -46,6 +46,6 @@ if __name__ == "__main__":
     password = getpass.getpass('Enter password: ')
     secret = getpass.getpass('Enter enable: ')
     print(get_uptime())
-    print('FREE PORTS: \n')
+    print('Looking for free ports...\n')
     for i in get_free_interfaces():
         print(i)
