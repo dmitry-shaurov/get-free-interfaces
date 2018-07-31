@@ -2,6 +2,7 @@ import re
 import getpass
 
 from netmiko import ConnectHandler
+from progress.bar import Bar
 
 
 def connect_to_device(hostname, username, password, secret):
@@ -27,16 +28,20 @@ def get_down_interfaces():
 def get_free_interfaces():
     free_interfaces = []
     down_interfaces = get_down_interfaces()
+    bar = Bar('Processing', suffix='%(percent)d%%', max=len(down_interfaces))
     device = connect_to_device(switch, username, password, secret)
     for int in down_interfaces:
         show_int = device.send_command('show interface {}'.format(int))
         match = re.search('(?P<packets>0 packets input, 0 bytes, 0 no buffer)', show_int)
         if match:
             free_interfaces.append(int)
+        bar.next()
+    bar.finish()
     device.disconnect()
     return free_interfaces
 
 def get_uptime():
+    print('Definig the switch uptime...')
     device = connect_to_device(switch, username, password, secret)
     return device.send_command('show version | in uptime is')
 
