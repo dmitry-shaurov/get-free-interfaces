@@ -18,8 +18,9 @@ def get_down_interfaces():
     device = connect_to_device(switch, username, password, secret)
     show_int_desc = device.send_command('show interfaces description | in dot1x')
     down_interfaces = []
+    print('Looking for free ports...\n')
     for i in show_int_desc.split('\n'):
-        match = re.findall('(?P<int>Gi\d/\d/\d{1,2}.+?down.+?down.+?dot1x)', i)
+        match = re.search('(?P<int>Gi\d/\d/\d{1,2}.+?down.+?down.+?dot1x)', i)
         if match:
             down_interfaces.append(match[0].split()[0])
     device.disconnect()
@@ -51,6 +52,5 @@ if __name__ == "__main__":
     password = getpass.getpass('Enter password: ')
     secret = getpass.getpass('Enter enable: ')
     print(get_uptime())
-    print('Looking for free ports...\n')
     for i in get_free_interfaces():
         print(i)
