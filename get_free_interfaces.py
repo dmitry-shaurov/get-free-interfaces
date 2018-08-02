@@ -46,11 +46,14 @@ def get_uptime():
     device = connect_to_device(switch, username, password, secret)
     return device.send_command('show version | in uptime is')
 
-if __name__ == "__main__":
-    switch = input('Enter switch name: ')
-    username = input('Enter username: ')
-    password = getpass.getpass('Enter password: ')
-    secret = getpass.getpass('Enter enable: ')
+def main():
     print(get_uptime())
     for i in get_free_interfaces():
         print(i)
+
+if __name__ == "__main__":
+    switch = input('Enter switch hostname or ipaddress: ')
+    username = input('Enter username: ')
+    password = getpass.getpass('Enter password: ')
+    secret = getpass.getpass('Enter enable: ')
+    main()
